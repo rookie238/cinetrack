@@ -3,10 +3,6 @@ from django.db import models
 
 
 class Profile(models.Model):
-    """
-    Kullanıcı profili. User oluştuğunda signals.py'daki post_save
-    sinyali ile otomatik yaratılır.
-    """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -31,19 +27,15 @@ class Profile(models.Model):
 
 
 class Follow(models.Model):
-    """
-    Kullanıcı-kullanıcı takip ilişkisi.
-    Bir Follow kaydı: 'follower' kullanıcısı, 'following' kullanıcısını takip ediyor.
-    """
     follower = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='following',  # user.following.all() → takip ettiği Follow kayıtları
+        related_name='following',
     )
     following = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='followers',  # user.followers.all() → onu takip eden Follow kayıtları
+        related_name='followers',
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
