@@ -4,10 +4,7 @@ from django.db import models
 
 
 class WatchEntry(models.Model):
-    """
-    Kullanıcının bir filmle ilişkisi: 'izleyeceğim', 'izliyorum', 'izledim'
-    + opsiyonel puan. Letterboxd'un 'shelf' mantığı.
-    """
+   
 
     class Status(models.TextChoices):
         WANT = 'want', 'İzlemek istiyor'
@@ -55,7 +52,6 @@ class WatchEntry(models.Model):
 
 
 class Review(models.Model):
-    """Kullanıcının bir filme yazdığı uzun yorum. Bir kullanıcı bir filme bir review."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -129,7 +125,7 @@ class ReviewLike(models.Model):
 
 
 class Comment(models.Model):
-    """Bir review'ın altındaki yorumlar."""
+    
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
