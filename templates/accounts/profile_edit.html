@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Profili Düzenle - CineTrack{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <h2 class="mb-4">Profili Düzenle</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <a href="{% url 'accounts:profile_self' %}" class="btn btn-outline-light">İptal</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

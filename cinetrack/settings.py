@@ -60,7 +60,7 @@ ROOT_URLCONF = 'cinetrack.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,3 +124,13 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Authentication
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'accounts:profile_self'
+LOGOUT_REDIRECT_URL = 'accounts:login'
+from django.contrib.messages import constants as message_constants
+
+MESSAGE_TAGS = {
+    message_constants.ERROR: 'danger',
+}

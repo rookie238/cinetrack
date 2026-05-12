@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Kayıt Ol - CineTrack{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">Kayıt Ol</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted d-block mt-1">{{ field.help_text|safe }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100">Kayıt Ol</button>
+                </form>
+                <hr class="my-4">
+                <p class="text-center mb-0">Zaten hesabın var mı? <a href="{% url 'accounts:login' %}">Giriş yap</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
