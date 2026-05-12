@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,8 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(0v3u&^0g)nzuuy2!f8@)t=!tbdiz(us=te^#-0qk9ehcjm_o0'
-
+SECRET_KEY = config('DEBUG', default=False, cast=bool)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -134,3 +134,8 @@ from django.contrib.messages import constants as message_constants
 MESSAGE_TAGS = {
     message_constants.ERROR: 'danger',
 }
+
+# TMDB API
+TMDB_API_TOKEN = config('TMDB_API_TOKEN')
+TMDB_BASE_URL = 'https://api.themoviedb.org/3'
+TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
