@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}{% if query %}{{ query }} aranıyor{% else %}Ara{% endif %} - CineTrack{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+        <form method="get" action="{% url 'movies:search' %}">
+            <div class="input-group input-group-lg">
+                <input type="search" name="q" value="{{ query }}" class="form-control" placeholder="Film veya dizi ara..." autofocus>
+                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Ara</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% if query and not error %}
+    <p class="text-muted">"{{ query }}" için sonuçlar — Sayfa {{ page }} / {{ total_pages }}</p>
+
+    {% if results %}
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+            {% for item in results %}
+                <div class="col">
+                    <a href="{% url 'movies:detail' media_type=item.media_type tmdb_id=item.id %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            {% if item.poster_path %}
+                                <img src="https://image.tmdb.org/t/p/w300{{ item.poster_path }}" class="card-img-top" alt="{{ item.title|default:item.name }}">
+                            {% else %}
+                                <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 300px; background-color: #2c3440;">
+                                    <i class="bi bi-film" style="font-size: 3rem; color: #44546a;"></i>
+                                </div>
+                            {% endif %}
+                            <div class="card-body p-2">
+                                <h6 class="card-title text-white mb-1 small">{{ item.title|default:item.name }}</h6>
+                                <small class="text-muted">
+                                    {% with date=item.release_date|default:item.first_air_date %}{{ date|slice:":4" }}{% endwith %}
+                                    · {% if item.media_type == 'movie' %}Film{% else %}Dizi{% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if total_pages > 1 %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                        <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page|add:'-1' }}">‹ Önceki</a></li>
+                    {% endif %}
+                    <li class="page-item active"><span class="page-link">{{ page }} / {{ total_pages }}</span></li>
+                    {% if page < total_pages %}
+                        <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page|add:'1' }}">Sonraki ›</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <p class="text-center text-muted py-5">Hiç sonuç bulunamadı.</p>
+    {% endif %}
+{% elif not query %}
+    <p class="text-center text-muted py-5">Aramak için bir şey yaz, hadi başlayalım 🎬</p>
+{% endif %}
+{% endblock %}

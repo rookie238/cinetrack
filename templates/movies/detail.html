@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}{{ movie.title }} - CineTrack{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        {% if movie.poster_url %}
+            <img src="{{ movie.poster_url }}" class="img-fluid rounded shadow" alt="{{ movie.title }}">
+        {% else %}
+            <div class="rounded d-flex align-items-center justify-content-center" style="background-color: #2c3440; aspect-ratio: 2/3;">
+                <i class="bi bi-film" style="font-size: 5rem; color: #44546a;"></i>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-8">
+        <h1 class="mb-2">{{ movie.title }}</h1>
+        {% if movie.original_title and movie.original_title != movie.title %}
+            <p class="text-muted">{{ movie.original_title }}</p>
+        {% endif %}
+
+        <div class="d-flex flex-wrap gap-3 mb-3 text-muted">
+            {% if movie.release_year %}<span><i class="bi bi-calendar"></i> {{ movie.release_year }}</span>{% endif %}
+            {% if movie.runtime %}<span><i class="bi bi-clock"></i> {{ movie.runtime }} dk</span>{% endif %}
+            {% if movie.vote_average %}<span><i class="bi bi-star-fill text-warning"></i> {{ movie.vote_average }}/10</span>{% endif %}
+            <span><i class="bi bi-tag"></i> {% if movie.media_type == 'movie' %}Film{% else %}Dizi{% endif %}</span>
+        </div>
+
+        {% if movie.genres.all %}
+            <div class="mb-3">
+                {% for genre in movie.genres.all %}
+                    <span class="badge bg-secondary me-1">{{ genre.name }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h5 class="mt-4">Özet</h5>
+        <p>{{ movie.overview|default:"Bu film/dizi için özet eklenmemiş." }}</p>
+
+        {% if user.is_authenticated %}
+            <div class="card mt-4">
+                <div class="card-body text-center text-muted">
+                    <em>Buraya "İzledim / İzlemek istiyorum / İzliyorum" butonları ve yorum bölümü gelecek (sonraki adımda)</em>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info mt-4">
+                Listene eklemek için <a href="{% url 'accounts:login' %}">giriş yap</a>.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
