@@ -28,16 +28,13 @@
 
         {% if movie.genres.all %}
             <div class="mb-3">
-                {% for genre in movie.genres.all %}
-                    <span class="badge bg-secondary me-1">{{ genre.name }}</span>
-                {% endfor %}
+                {% for genre in movie.genres.all %}<span class="badge bg-secondary me-1">{{ genre.name }}</span>{% endfor %}
             </div>
         {% endif %}
 
         <h5 class="mt-4">Özet</h5>
         <p>{{ movie.overview|default:"Bu film/dizi için özet eklenmemiş." }}</p>
 
-        {# ━━━━━━━━━━ WatchEntry Bölümü ━━━━━━━━━━ #}
         {% if user.is_authenticated %}
             <div class="card mt-4">
                 <div class="card-body">
@@ -61,8 +58,7 @@
                     {% if user_watch_entry %}
                         <form method="post" action="{% url 'tracking:watch_delete' media_type=movie.media_type tmdb_id=movie.tmdb_id %}" class="mt-2">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Listenden çıkarılsın mı?')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Listenden çıkarılsın mı?')">
                                 <i class="bi bi-trash"></i> Listemden çıkar
                             </button>
                         </form>
@@ -77,7 +73,6 @@
     </div>
 </div>
 
-{# ━━━━━━━━━━ Review Bölümü ━━━━━━━━━━ #}
 <div class="row mt-5">
     <div class="col-md-10 offset-md-1">
         <h3>💬 Yorumlar</h3>
@@ -88,26 +83,13 @@
                     <h6>{% if user_review %}Yorumunu Güncelle{% else %}Yorum Yaz{% endif %}</h6>
                     <form method="post" action="{% url 'tracking:review_save' media_type=movie.media_type tmdb_id=movie.tmdb_id %}">
                         {% csrf_token %}
-                        <div class="mb-2">
-                            <label class="form-label small">{{ review_form.rating.label }}</label>
-                            {{ review_form.rating }}
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label small">{{ review_form.text.label }}</label>
-                            {{ review_form.text }}
-                        </div>
+                        <div class="mb-2"><label class="form-label small">{{ review_form.rating.label }}</label>{{ review_form.rating }}</div>
+                        <div class="mb-2"><label class="form-label small">{{ review_form.text.label }}</label>{{ review_form.text }}</div>
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                {% if user_review %}Güncelle{% else %}Gönder{% endif %}
-                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm">{% if user_review %}Güncelle{% else %}Gönder{% endif %}</button>
                             {% if user_review %}
-                                <button type="submit"
-                                        formaction="{% url 'tracking:review_delete' review_id=user_review.id %}"
-                                        formmethod="post"
-                                        class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('Yorum silinsin mi?')">
-                                    Yorumu Sil
-                                </button>
+                                <button type="submit" formaction="{% url 'tracking:review_delete' review_id=user_review.id %}" formmethod="post"
+                                        class="btn btn-outline-danger btn-sm" onclick="return confirm('Yorum silinsin mi?')">Yorumu Sil</button>
                             {% endif %}
                         </div>
                     </form>
@@ -115,36 +97,69 @@
             </div>
         {% endif %}
 
-        {% with all_reviews=other_reviews %}
-            {% if user_review or all_reviews %}
-                {% if user_review %}
-                    <div class="card mb-3 border-warning">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <strong><a href="{% url 'accounts:profile_detail' username=user_review.user.username %}">{{ user_review.user.username }}</a> <span class="badge bg-warning text-dark">Sen</span></strong>
-                                <span><i class="bi bi-star-fill text-warning"></i> {{ user_review.rating }}/10</span>
-                            </div>
-                            <p class="mt-2 mb-1">{{ user_review.text|linebreaks }}</p>
-                            <small class="text-muted">{{ user_review.created_at|date:"d M Y, H:i" }}</small>
-                        </div>
+        {% if user_review %}
+            <div class="card mb-3 border-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <strong><a href="{% url 'accounts:profile_detail' username=user_review.user.username %}">{{ user_review.user.username }}</a> <span class="badge bg-warning text-dark">Sen</span></strong>
+                        <span><i class="bi bi-star-fill text-warning"></i> {{ user_review.rating }}/10</span>
                     </div>
-                {% endif %}
-                {% for r in all_reviews %}
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <strong><a href="{% url 'accounts:profile_detail' username=r.user.username %}">{{ r.user.username }}</a></strong>
-                                <span><i class="bi bi-star-fill text-warning"></i> {{ r.rating }}/10</span>
-                            </div>
-                            <p class="mt-2 mb-1">{{ r.text|linebreaks }}</p>
-                            <small class="text-muted">{{ r.created_at|date:"d M Y, H:i" }}</small>
-                        </div>
+                    <p class="mt-2 mb-1">{{ user_review.text|linebreaks }}</p>
+                    <small class="text-muted">{{ user_review.created_at|date:"d M Y, H:i" }}</small>
+                </div>
+            </div>
+        {% endif %}
+
+        {% for r in other_reviews %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <strong><a href="{% url 'accounts:profile_detail' username=r.user.username %}">{{ r.user.username }}</a></strong>
+                        <span><i class="bi bi-star-fill text-warning"></i> {{ r.rating }}/10</span>
                     </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-muted text-center py-3">Henüz yorum yok. İlk yorumu sen yaz!</p>
-            {% endif %}
-        {% endwith %}
+                    <p class="mt-2 mb-1">{{ r.text|linebreaks }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">{{ r.created_at|date:"d M Y, H:i" }}</small>
+                        {% if user.is_authenticated %}
+                            <button class="btn btn-sm like-btn {% if r.id in liked_review_ids %}btn-danger{% else %}btn-outline-danger{% endif %}"
+                                    data-url="{% url 'tracking:review_like' review_id=r.id %}">
+                                <i class="bi bi-heart-fill"></i>
+                                <span class="like-count">{{ r.like_count }}</span>
+                            </button>
+                        {% else %}
+                            <span class="small text-muted"><i class="bi bi-heart-fill text-danger"></i> {{ r.like_count }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            {% if not user_review %}<p class="text-muted text-center py-3">Henüz yorum yok. İlk yorumu sen yaz!</p>{% endif %}
+        {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCsrfToken() {
+    const c = document.cookie.split(';').find(x => x.trim().startsWith('csrftoken='));
+    return c ? decodeURIComponent(c.trim().substring(10)) : '';
+}
+
+document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        try {
+            const res = await fetch(btn.dataset.url, {
+                method: 'POST',
+                headers: {'X-CSRFToken': getCsrfToken()},
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            btn.classList.toggle('btn-danger', data.liked);
+            btn.classList.toggle('btn-outline-danger', !data.liked);
+            btn.querySelector('.like-count').textContent = data.count;
+        } catch (e) { console.error(e); }
+    });
+});
+</script>
 {% endblock %}
