@@ -1,16 +1,20 @@
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
+"""Accounts views — auth + profile."""
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import get_user_model, login
+from django.contrib.auth.decorators import login_required
+from django.db.models import Avg, Count
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import SignUpForm, ProfileUpdateForm
+from tracking.models import Review, WatchEntry
+
+from .forms import ProfileUpdateForm, SignUpForm
+from .models import Profile
 
 User = get_user_model()
 
 
 def signup_view(request):
-    """Yeni kullanıcı kaydı. Başarılıysa otomatik giriş yapıp profile'a yönlendir."""
+    """Yeni kullanıcı kaydı."""
     if request.user.is_authenticated:
         return redirect('accounts:profile_self')
 
@@ -18,31 +22,73 @@ def signup_view(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # otomatik giriş
-            messages.success(request, f"Hoş geldin {user.username}! Hesabın oluşturuldu.")
+            login(request, user)
+            messages.success(request, f"Hoş geldin {user.username}!")
             return redirect('accounts:profile_self')
     else:
         form = SignUpForm()
-
     return render(request, 'registration/signup.html', {'form': form})
 
 
 @login_required
 def profile_self_view(request):
-    """Mevcut kullanıcının kendi profili."""
+    """Kendi profiline yönlendir."""
     return redirect('accounts:profile_detail', username=request.user.username)
 
 
 def profile_detail_view(request, username):
-    """Bir kullanıcının profili (kendisi ya da başkası olabilir)."""
-    user_obj = get_object_or_404(User.objects.select_related('profile'), username=username)
+    """Kullanıcının profili: stats + watch lists + reviews."""
+    user_obj = get_object_or_404(
+        User.objects.select_related('profile'),
+        username=username,
+    )
     is_self = request.user.is_authenticated and request.user == user_obj
-    
-    # İleride buraya: kullanıcının watch_entries, reviews vb. eklenecek
+
+    # Eski kullanıcıların eksik profile'ını otomatik yarat (güvenlik ağı)
+    profile_obj, _ = Profile.objects.get_or_create(user=user_obj)
+
+    # Watch entries — status'a göre ayır
+    watch_entries = (
+        WatchEntry.objects
+        .filter(user=user_obj)
+        .select_related('movie')
+        .prefetch_related('movie__genres')
+        .order_by('-updated_at')
+    )
+    watched = [e for e in watch_entries if e.status == WatchEntry.Status.WATCHED]
+    watching = [e for e in watch_entries if e.status == WatchEntry.Status.WATCHING]
+    want = [e for e in watch_entries if e.status == WatchEntry.Status.WANT]
+
+    # Reviews
+    reviews = list(
+        Review.objects
+        .filter(user=user_obj)
+        .select_related('movie')
+        .order_by('-created_at')
+    )
+
+    # Stats — DB'de aggregate
+    stats = WatchEntry.objects.filter(
+        user=user_obj,
+        status=WatchEntry.Status.WATCHED,
+    ).aggregate(
+        avg_rating=Avg('rating'),
+        rated_count=Count('rating'),
+    )
+
     context = {
         'profile_user': user_obj,
-        'profile': user_obj.profile,
+        'profile': profile_obj,
         'is_self': is_self,
+        'watched': watched,
+        'watching': watching,
+        'want': want,
+        'reviews': reviews,
+        'watched_count': len(watched),
+        'watching_count': len(watching),
+        'want_count': len(want),
+        'review_count': len(reviews),
+        'avg_rating': stats['avg_rating'],
     }
     return render(request, 'accounts/profile_detail.html', context)
 
@@ -50,7 +96,7 @@ def profile_detail_view(request, username):
 @login_required
 def profile_edit_view(request):
     """Profil düzenleme."""
-    profile = request.user.profile
+    profile, _ = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -59,5 +105,4 @@ def profile_edit_view(request):
             return redirect('accounts:profile_self')
     else:
         form = ProfileUpdateForm(instance=profile)
-
     return render(request, 'accounts/profile_edit.html', {'form': form})

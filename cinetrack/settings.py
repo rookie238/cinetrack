@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'movies',
     'tracking',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,15 @@ MESSAGE_TAGS = {
 TMDB_API_TOKEN = config('TMDB_API_TOKEN')
 TMDB_BASE_URL = 'https://api.themoviedb.org/3'
 TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+}

@@ -1,0 +1,35 @@
+{% if entries %}
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+        {% for entry in entries %}
+            <div class="col">
+                <a href="{% url 'movies:detail' media_type=entry.movie.media_type tmdb_id=entry.movie.tmdb_id %}"
+                   class="text-decoration-none">
+                    <div class="card h-100 position-relative">
+                        {% if entry.rating %}
+                            <span class="badge bg-warning text-dark position-absolute" style="top: 0.5rem; right: 0.5rem; z-index: 2;">
+                                <i class="bi bi-star-fill"></i> {{ entry.rating }}
+                            </span>
+                        {% endif %}
+                        {% if entry.movie.poster_url %}
+                            <img src="{{ entry.movie.poster_url }}" class="card-img-top" alt="{{ entry.movie.title }}">
+                        {% else %}
+                            <div class="card-img-top d-flex align-items-center justify-content-center"
+                                 style="height: 260px; background-color: #2c3440;">
+                                <i class="bi bi-film" style="font-size: 2.5rem; color: #44546a;"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-white mb-1 small">{{ entry.movie.title }}</h6>
+                            <small class="text-muted">
+                                {{ entry.movie.release_year|default:"—" }}
+                                · {% if entry.movie.media_type == 'movie' %}Film{% else %}Dizi{% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted text-center py-4">{{ empty_msg }}</p>
+{% endif %}
