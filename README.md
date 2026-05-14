@@ -8,20 +8,20 @@ Kullanıcılar TMDB üzerinden film/dizi arar, izleme listelerine ekler, puanlar
 
 ---
 
-## ✨ Özellikler
+##  Özellikler
 
-- 🔐 **Kullanıcı sistemi:** kayıt, giriş, çıkış, profil düzenleme
-- 🎥 **TMDB arama:** film + dizi araması (pagination dahil)
-- 📋 **Watchlist:** 3 durum (izledim / izliyorum / izlemek istiyorum)
-- ⭐ **Puanlama:** 1-10 arası
-- 💬 **Yorum sistemi:** yazma, düzenleme, silme
-- ❤️ **AJAX beğeni:** sayfa yenilemeden yorum beğen
-- 👥 **AJAX takip:** kullanıcı takip et / takipten çık
-- 📊 **Profil istatistikleri:** izlenen sayısı, ortalama puan, tab'lı liste
-- 🌐 **REST API:** Django REST Framework ile JSON endpoint'ler
+- **Kullanıcı sistemi:** kayıt, giriş, çıkış, profil düzenleme
+-  **TMDB arama:** film + dizi araması (pagination dahil)
+-  **Watchlist:** 3 durum (izledim / izliyorum / izlemek istiyorum)
+-  **Puanlama:** 1-10 arası
+-  **Yorum sistemi:** yazma, düzenleme, silme
+-  **AJAX beğeni:** sayfa yenilemeden yorum beğen
+-  **AJAX takip:** kullanıcı takip et / takipten çık
+-  **Profil istatistikleri:** izlenen sayısı, ortalama puan, tab'lı liste
+-  **REST API:** Django REST Framework ile JSON endpoint'ler
 - 📱 **Responsive UI:** Bootstrap 5 dark cinema teması
 
-## 🛠️ Teknoloji Stack'i
+##  Teknoloji Stack'i
 
 | Katman | Teknoloji |
 |---|---|
@@ -32,7 +32,7 @@ Kullanıcılar TMDB üzerinden film/dizi arar, izleme listelerine ekler, puanlar
 | Config | python-decouple (env vars) |
 | Python | 3.13+ |
 
-## 🚀 Kurulum
+##  Kurulum
 
 ### Gereksinimler
 
@@ -74,7 +74,7 @@ python manage.py runserver
 
 Tarayıcıda `http://127.0.0.1:8000/` aç.
 
-## ⚙️ Yapılandırma
+##  Yapılandırma
 
 `.env` dosyası proje root'unda olmalı:
 
@@ -88,7 +88,7 @@ TMDB_API_TOKEN=tmdb-bearer-token-buraya
 - **DEBUG**: dev'de True, prod'da False
 - **TMDB_API_TOKEN**: TMDB → Settings → API → "API Read Access Token" (uzun JWT)
 
-## 🧪 Test
+##  Test
 
 ```bash
 python manage.py test
@@ -96,7 +96,7 @@ python manage.py test
 
 27 unit + integration test. Model constraint'leri, view'lar, AJAX endpoint'leri, DRF API ve authorization kontrollerini kapsıyor.
 
-## 🌐 API
+## API
 
 DRF Browsable API: `http://127.0.0.1:8000/api/`
 
@@ -119,7 +119,7 @@ Bu dosya projenin **mimari kararlarını**, **model yapısını** ve **önemli i
 
 ---
 
-## 🏗️ Mimari
+##  Mimari
 
 CineTrack 4 Django app'i + 1 proje config'inden oluşur:
 cinetrack (proje config)
@@ -147,12 +147,12 @@ Bu ayrıştırma **separation of concerns** ilkesini uygular: her app tek bir do
 
 ---
 
-## 📊 Veritabanı Modelleri
+##  Veritabanı Modelleri
 
 ### Kullanıcı tarafı
 **Follow constraint'leri:**
-- `UniqueConstraint(follower, following)` — aynı kişiyi iki kez takip edemezsin
-- `CheckConstraint(follower != following)` — kendini takip edemezsin (DB seviyesi)
+- `UniqueConstraint(follower, following)` 
+- `CheckConstraint(follower != following)` 
 
 ### Film tarafı
 `Movie` TMDB'den çekilen verinin **lokal cache'i**. `fetched_at` son güncelleme zamanını tutar; 7 günden eski kayıtlar yenilenir.
@@ -160,11 +160,12 @@ Bu ayrıştırma **separation of concerns** ilkesini uygular: her app tek bir do
 ### Etkileşim tarafı
 ---
 
-## 🎯 Önemli Tasarım Kararları
+##  Önemli Tasarım Kararları
 
 ### 1. TMDB cache stratejisi
 
-TMDB API'sine her sayfa yüklemesinde gitmek hem yavaş hem de rate limit'e takılır. Çözüm:
+
+
 
 ```python
 # movies/services.py
@@ -180,11 +181,10 @@ def get_or_fetch_movie(tmdb_id, media_type):
     return save_movie_from_tmdb(data, media_type)
 ```
 
-Bu yaklaşım her film için API çağrı sayısını **haftalık 1**'e indirir.
+
 
 ### 2. Profile signal ile otomatik yaratma
 
-Yeni User oluştuğunda Profile otomatik yaratılmasını `post_save` sinyali sağlar:
 
 ```python
 # accounts/signals.py
@@ -198,12 +198,11 @@ Bu sayede her kullanıcının Profile'ı garantilenmiş olur, view'larda `try/ex
 
 ### 3. Authorization stratejisi (iki katmanlı)
 
-**View seviyesi:** sahip filtreleme + 404
 ```python
 # tracking/views.py — başkasının yorumunu silmeye çalışsan 404 yer
 review = get_object_or_404(Review, id=review_id, user=request.user)
 ```
-404 dönmek 403'ten güvenlidir: kaynağın varlığını bile sızdırmaz.
+
 
 **API seviyesi:** custom DRF permission
 ```python
@@ -218,7 +217,7 @@ Herkes GET, sadece sahibi PUT/DELETE.
 
 ### 4. Query efficiency: select_related & prefetch_related
 
-Tüm liste view'larında N+1 query'den kaçınılmıştır:
+
 
 ```python
 # accounts/views.py — profil sayfası
@@ -245,7 +244,7 @@ stats = WatchEntry.objects.filter(
 )
 ```
 
-DB tek bir SQL ile hesaplar, Python'a sadece sonuç döner.
+
 
 ### 6. AJAX endpoint tasarımı
 
@@ -291,7 +290,7 @@ TMDB_API_TOKEN = config('TMDB_API_TOKEN')
 
 ---
 
-## 🔌 API Referansı
+##  API Referansı
 
 Browsable API: `/api/`
 
@@ -306,7 +305,7 @@ Session-based. Browsable API üzerinden:
 
 ---
 
-## 🧪 Test Stratejisi
+##  Test Stratejisi
 
 27 test, 4 kategori:
 
@@ -322,10 +321,10 @@ Session-based. Browsable API üzerinden:
 
 ---
 
-## 🚧 Gelecek Geliştirmeler
+##  Gelecek Geliştirmeler
 
-- [ ] Activity feed (takip edilenlerin son aktiviteleri)
-- [ ] Custom user lists (örn. "En İyi 10 Korku Filmim")
+- [ ] Activity feed 
+- [ ] Custom user lists 
 - [ ] Tür-tabanlı film önerme algoritması
 - [ ] PostgreSQL'e geçiş
 - [ ] Docker + docker-compose desteği
