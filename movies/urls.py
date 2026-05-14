@@ -1,3 +1,4 @@
+"""Movies URL routing — TMDB arama ve film detay sayfaları."""
 from django.urls import path
 
 from . import views

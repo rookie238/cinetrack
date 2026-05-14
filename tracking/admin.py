@@ -1,9 +1,12 @@
+"""Tracking admin — WatchEntry, Review, ReviewLike, Comment için admin kayıtları."""
 from django.contrib import admin
-from .models import WatchEntry, Review, ReviewLike, Comment
+
+from .models import Comment, Review, ReviewLike, WatchEntry
 
 
 @admin.register(WatchEntry)
 class WatchEntryAdmin(admin.ModelAdmin):
+    """Kullanıcıların izleme listesi kayıtları için admin görünümü."""
     list_display = ['user', 'movie', 'status', 'rating', 'updated_at']
     list_filter = ['status', 'rating', 'updated_at']
     search_fields = ['user__username', 'movie__title']
@@ -13,6 +16,7 @@ class WatchEntryAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
+    """Yorumlar için admin görünümü."""
     list_display = ['user', 'movie', 'rating', 'like_count', 'comment_count', 'created_at']
     list_filter = ['rating', 'created_at']
     search_fields = ['user__username', 'movie__title', 'text']
@@ -22,6 +26,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(ReviewLike)
 class ReviewLikeAdmin(admin.ModelAdmin):
+    """Yorum beğenileri için admin görünümü."""
     list_display = ['user', 'review', 'created_at']
     search_fields = ['user__username']
     autocomplete_fields = ['user', 'review']
@@ -30,6 +35,7 @@ class ReviewLikeAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
+    """Review altı yorumlar için admin görünümü."""
     list_display = ['user', 'review', 'short_text', 'created_at']
     search_fields = ['user__username', 'text']
     autocomplete_fields = ['user', 'review']
@@ -37,4 +43,5 @@ class CommentAdmin(admin.ModelAdmin):
 
     @admin.display(description='Yorum')
     def short_text(self, obj):
+        """Listede uzun yorumları 60 karaktere kadar göster."""
         return obj.text[:60] + ('...' if len(obj.text) > 60 else '')

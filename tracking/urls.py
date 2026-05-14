@@ -1,3 +1,4 @@
+"""Tracking URL routing — WatchEntry/Review CRUD + AJAX like."""
 from django.urls import path
 
 from . import views
