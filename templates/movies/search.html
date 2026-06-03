@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-{% block title %}{% if query %}{{ query }} aranıyor{% else %}Ara{% endif %} - CineTrack{% endblock %}
+{% block title %}{% if query %}{{ query }} searching{% else %}Search{% endif %} - CineTrack{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mb-4">
     <div class="col-md-8">
         <form method="get" action="{% url 'movies:search' %}">
             <div class="input-group input-group-lg">
-                <input type="search" name="q" value="{{ query }}" class="form-control" placeholder="Film veya dizi ara..." autofocus>
-                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Ara</button>
+                <input type="search" name="q" value="{{ query }}" class="form-control" placeholder="Search for movies or series..." autofocus>
+                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Search</button>
             </div>
         </form>
     </div>
@@ -18,7 +18,7 @@
 {% endif %}
 
 {% if query and not error %}
-    <p class="text-muted">"{{ query }}" için sonuçlar — Sayfa {{ page }} / {{ total_pages }}</p>
+    <p class="text-muted">"{{ query }}" for results — Page {{ page }} / {{ total_pages }}</p>
 
     {% if results %}
         <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
@@ -60,9 +60,9 @@
             </nav>
         {% endif %}
     {% else %}
-        <p class="text-center text-muted py-5">Hiç sonuç bulunamadı.</p>
+        <p class="text-center text-muted py-5">No results found.</p>
     {% endif %}
 {% elif not query %}
-    <p class="text-center text-muted py-5">Aramak için bir şey yaz, hadi başlayalım 🎬</p>
+    <p class="text-center text-muted py-5">Write something to search, let's get started 🎬</p>
 {% endif %}
 {% endblock %}

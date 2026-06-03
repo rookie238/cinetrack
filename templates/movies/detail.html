@@ -32,34 +32,34 @@
             </div>
         {% endif %}
 
-        <h5 class="mt-4">Özet</h5>
-        <p>{{ movie.overview|default:"Bu film/dizi için özet eklenmemiş." }}</p>
+        <h5 class="mt-4">Synopsis</h5>
+        <p>{{ movie.overview|default:"No synopsis has been added for this movie/series." }}</p>
 
         {% if user.is_authenticated %}
             <div class="card mt-4">
                 <div class="card-body">
-                    <h5 class="card-title">📋 Listene Ekle / Güncelle</h5>
+                    <h5 class="card-title"> Add to List / Update</h5>
                     <form method="post" action="{% url 'tracking:watch_update' media_type=movie.media_type tmdb_id=movie.tmdb_id %}">
                         {% csrf_token %}
                         <div class="row g-2 align-items-end">
                             <div class="col-md-6">
-                                <label class="form-label small">Durum</label>
+                                <label class="form-label small">Status</label>
                                 {{ watch_form.status }}
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label small">Puan (1-10)</label>
+                                <label class="form-label small">Rating (1-10)</label>
                                 {{ watch_form.rating }}
                             </div>
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+                                <button type="submit" class="btn btn-primary w-100">Save</button>
                             </div>
                         </div>
                     </form>
                     {% if user_watch_entry %}
                         <form method="post" action="{% url 'tracking:watch_delete' media_type=movie.media_type tmdb_id=movie.tmdb_id %}" class="mt-2">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Listenden çıkarılsın mı?')">
-                                <i class="bi bi-trash"></i> Listemden çıkar
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Remove from your list?')">
+                                <i class="bi bi-trash"></i>Remove from my list
                             </button>
                         </form>
                     {% endif %}
@@ -67,7 +67,7 @@
             </div>
         {% else %}
             <div class="alert alert-info mt-4">
-                Listene eklemek ve yorum yazmak için <a href="{% url 'accounts:login' %}">giriş yap</a>.
+               To add to your list and leave a comment <a href="{% url 'accounts:login' %}">Log in</a>.
             </div>
         {% endif %}
     </div>
@@ -75,21 +75,21 @@
 
 <div class="row mt-5">
     <div class="col-md-10 offset-md-1">
-        <h3>💬 Yorumlar</h3>
+        <h3>💬 Reviews</h3>
 
         {% if user.is_authenticated %}
             <div class="card mb-4">
                 <div class="card-body">
-                    <h6>{% if user_review %}Yorumunu Güncelle{% else %}Yorum Yaz{% endif %}</h6>
+                    <h6>{% if user_review %}Update Your Review{% else %}Write a Review{% endif %}</h6>
                     <form method="post" action="{% url 'tracking:review_save' media_type=movie.media_type tmdb_id=movie.tmdb_id %}">
                         {% csrf_token %}
                         <div class="mb-2"><label class="form-label small">{{ review_form.rating.label }}</label>{{ review_form.rating }}</div>
                         <div class="mb-2"><label class="form-label small">{{ review_form.text.label }}</label>{{ review_form.text }}</div>
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary btn-sm">{% if user_review %}Güncelle{% else %}Gönder{% endif %}</button>
+                            <button type="submit" class="btn btn-primary btn-sm">{% if user_review %}Update{% else %}Submit{% endif %}</button>
                             {% if user_review %}
                                 <button type="submit" formaction="{% url 'tracking:review_delete' review_id=user_review.id %}" formmethod="post"
-                                        class="btn btn-outline-danger btn-sm" onclick="return confirm('Yorum silinsin mi?')">Yorumu Sil</button>
+                                        class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete review?')">Delete Review</button>
                             {% endif %}
                         </div>
                     </form>
@@ -101,7 +101,7 @@
             <div class="card mb-3 border-warning">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <strong><a href="{% url 'accounts:profile_detail' username=user_review.user.username %}">{{ user_review.user.username }}</a> <span class="badge bg-warning text-dark">Sen</span></strong>
+                        <strong><a href="{% url 'accounts:profile_detail' username=user_review.user.username %}">{{ user_review.user.username }}</a> <span class="badge bg-warning text-dark">You</span></strong>
                         <span><i class="bi bi-star-fill text-warning"></i> {{ user_review.rating }}/10</span>
                     </div>
                     <p class="mt-2 mb-1">{{ user_review.text|linebreaks }}</p>
@@ -133,7 +133,7 @@
                 </div>
             </div>
         {% empty %}
-            {% if not user_review %}<p class="text-muted text-center py-3">Henüz yorum yok. İlk yorumu sen yaz!</p>{% endif %}
+            {% if not user_review %}<p class="text-muted text-center py-3">No reviews yet. Be the first to write a review!</p>{% endif %}
         {% endfor %}
     </div>
 </div>

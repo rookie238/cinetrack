@@ -22,9 +22,9 @@ def update_watch_entry_view(request, media_type, tmdb_id):
     form = WatchEntryForm(request.POST, instance=entry)
     if form.is_valid():
         form.save()
-        messages.success(request, "Liste güncellendi.")
+        messages.success(request, "The list has been updated.")
     else:
-        messages.error(request, "Geçersiz veri.")
+        messages.error(request, "Invalid data.")
     return redirect('movies:detail', media_type=media_type, tmdb_id=tmdb_id)
 
 
@@ -34,7 +34,7 @@ def delete_watch_entry_view(request, media_type, tmdb_id):
     movie = get_object_or_404(Movie, tmdb_id=tmdb_id, media_type=media_type)
     deleted, _ = WatchEntry.objects.filter(user=request.user, movie=movie).delete()
     if deleted:
-        messages.success(request, "Listenden çıkarıldı.")
+        messages.success(request, "The item has been removed from the list.")
     return redirect('movies:detail', media_type=media_type, tmdb_id=tmdb_id)
 
 
@@ -49,7 +49,7 @@ def save_review_view(request, media_type, tmdb_id):
         review.user = request.user
         review.movie = movie
         review.save()
-        messages.success(request, "Yorumun kaydedildi.")
+        messages.success(request, "The review has been saved.")
     else:
         for field, errs in form.errors.items():
             for err in errs:
@@ -64,7 +64,7 @@ def delete_review_view(request, review_id):
     media_type = review.movie.media_type
     tmdb_id = review.movie.tmdb_id
     review.delete()
-    messages.success(request, "Yorumun silindi.")
+    messages.success(request, "The review has been deleted.")
     return redirect('movies:detail', media_type=media_type, tmdb_id=tmdb_id)
 
 

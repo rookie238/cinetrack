@@ -4,7 +4,10 @@ Film ve dizi takip platformu — Letterboxd tarzı bir sosyal film uygulaması.
 
 Kullanıcılar TMDB üzerinden film/dizi arar, izleme listelerine ekler, puanlar, yorum yazar, başkalarının yorumlarını beğenir ve birbirini takip eder.
 
-**Yeditepe Üniversitesi, Bilişim Sistemleri ve Teknolojileri** Django dönem projesi.
+🌐 **Canlı Demo:** [https://cinetrack-7gqr.onrender.com](https://cinetrack-7gqr.onrender.com)
+
+
+ `/admin/` paneline superuser ile girebilirsiniz.
 
 ---
 

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Kayıt Ol - CineTrack{% endblock %}
+{% block title %}Sign up - CineTrack{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card shadow">
             <div class="card-body p-4">
-                <h2 class="text-center mb-4">Kayıt Ol</h2>
+                <h2 class="text-center mb-4">Sign up</h2>
                 <form method="post">
                     {% csrf_token %}
                     {% for field in form %}
@@ -20,10 +20,10 @@
                             {% endfor %}
                         </div>
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary w-100">Kayıt Ol</button>
+                    <button type="submit" class="btn btn-primary w-100">Sign up</button>
                 </form>
                 <hr class="my-4">
-                <p class="text-center mb-0">Zaten hesabın var mı? <a href="{% url 'accounts:login' %}">Giriş yap</a></p>
+                <p class="text-center mb-0">Already have an account? <a href="{% url 'accounts:login' %}">Log in</a></p>
             </div>
         </div>
     </div>

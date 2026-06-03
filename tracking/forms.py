@@ -16,8 +16,8 @@ class WatchEntryForm(forms.ModelForm):
             }),
         }
         labels = {
-            'status': 'Durum',
-            'rating': 'Puan',
+            'status': 'Status',
+            'rating': 'Rating',
         }
 
 
@@ -32,11 +32,11 @@ class ReviewForm(forms.ModelForm):
             }),
             'text': forms.Textarea(attrs={
                 'class': 'form-control', 'rows': 4,
-                'placeholder': 'Bu film/dizi hakkında ne düşünüyorsun?',
+                'placeholder': 'What do you think about this movie/series?',
                 'required': True,
             }),
         }
         labels = {
-            'rating': 'Puan (1-10)',
-            'text': 'Yorum',
+            'rating': 'Rating (1-10)',
+            'text': 'Review',
         }

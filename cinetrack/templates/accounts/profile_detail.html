@@ -42,12 +42,12 @@
     <div class="col-md-8">
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title">Hakkında</h5>
+                <h5 class="card-title">About</h5>
                 {% if profile.bio %}
                     <p class="mb-0">{{ profile.bio|linebreaks }}</p>
                 {% else %}
                     <p class="text-muted mb-0">
-                        <em>{% if is_self %}Henüz bir bio yazmadın.{% else %}Henüz bio yazılmamış.{% endif %}</em>
+                        <em>{% if is_self %}You haven't written a bio yet.{% else %}No bio has been written yet.{% endif %}</em>
                     </p>
                 {% endif %}
             </div>
@@ -55,7 +55,7 @@
 
         <div class="card">
             <div class="card-body text-center text-muted">
-                <em>Buraya kullanıcının izleme listesi ve yorumları gelecek (ileriki adımlarda).</em>
+                <em>Here will be the user's watchlist and reviews (in future steps).</em>
             </div>
         </div>
     </div>

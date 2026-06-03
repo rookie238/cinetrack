@@ -40,7 +40,7 @@ def search_view(request):
                 })
             total_pages = min(data.get('total_pages', 1), 500)
         except requests.RequestException:
-            error = "TMDB'ye ulaşılamadı, lütfen biraz sonra tekrar dene."
+            error = "TMDB could not be reached, please try again later."
 
     return render(request, 'movies/search.html', {
         'query': query,
@@ -54,12 +54,12 @@ def search_view(request):
 def movie_detail_view(request, media_type, tmdb_id):
     """Film/dizi detayı + kullanıcının watch entry/review + tüm review'lar."""
     if media_type not in ('movie', 'tv'):
-        raise Http404("Geçersiz medya tipi")
+        raise Http404("Invalid media type")
 
     try:
         movie = services.get_or_fetch_movie(tmdb_id, media_type)
     except requests.RequestException:
-        raise Http404("Film/dizi TMDB'den çekilemedi")
+        raise Http404("Movie/series could not be fetched from TMDB")
 
     user_watch_entry = None
     user_review = None

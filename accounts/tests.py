@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 class ProfileSignalTest(TestCase):
-    """User oluşunca Profile otomatik yaratılıyor mu?"""
+    
 
     def test_profile_created_on_user_creation(self):
         user = User.objects.create_user(username='test1', password='pass12345')
@@ -25,7 +25,7 @@ class ProfileSignalTest(TestCase):
 
 
 class FollowConstraintsTest(TestCase):
-    """Follow modelinin DB constraint'leri çalışıyor mu?"""
+   
 
     def setUp(self):
         self.user1 = User.objects.create_user(username='u1', password='pass12345')
@@ -48,7 +48,7 @@ class FollowConstraintsTest(TestCase):
 
 
 class SignupViewTest(TestCase):
-    """Signup view'ı doğru çalışıyor mu?"""
+    
 
     def test_signup_get_returns_form(self):
         response = self.client.get(reverse('accounts:signup'))
@@ -67,7 +67,7 @@ class SignupViewTest(TestCase):
 
 
 class FollowAjaxTest(TestCase):
-    """AJAX follow toggle çalışıyor mu?"""
+    
 
     def setUp(self):
         self.user1 = User.objects.create_user(username='u1', password='pass12345')

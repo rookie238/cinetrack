@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}Ana Sayfa - CineTrack{% endblock %}
+{% block title %}Home - CineTrack{% endblock %}
 {% block content %}
 <div class="text-center py-5">
     <h1 class="display-3 fw-bold mb-3"><i class="bi bi-film text-warning"></i> CineTrack</h1>
-    <p class="lead mb-4">Film ve dizilerini takip et, puanla, yorumla, paylaş.</p>
+    <p class="lead mb-4">Follow movies and series, rate them, comment on them, and share.</p>
     {% if user.is_authenticated %}
-        <p>Hoş geldin, <strong>{{ user.username }}</strong>!
-            <a href="{% url 'accounts:profile_self' %}">Profiline git →</a>
+        <p>Welcome back, <strong>{{ user.username }}</strong>!
+            <a href="{% url 'accounts:profile_self' %}">Go to your profile →</a>
         </p>
     {% else %}
         <div class="mt-4">
-            <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg me-2">Hemen Başla</a>
-            <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-lg">Giriş Yap</a>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg me-2">Get Started</a>
+            <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-lg">Log In</a>
         </div>
     {% endif %}
 </div>

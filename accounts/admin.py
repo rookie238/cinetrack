@@ -1,4 +1,4 @@
-"""Accounts admin — Profile ve Follow için Django admin kayıtları."""
+"""Accounts admin  Profile ve Follow için Django admin kayıtları."""
 from django.contrib import admin
 
 from .models import Follow, Profile

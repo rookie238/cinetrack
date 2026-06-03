@@ -7,9 +7,9 @@ class WatchEntry(models.Model):
    
 
     class Status(models.TextChoices):
-        WANT = 'want', 'İzlemek istiyor'
-        WATCHING = 'watching', 'İzliyor'
-        WATCHED = 'watched', 'İzledi'
+        WANT = 'want', 'Want to Watch'
+        WATCHING = 'watching', 'Watching'
+        WATCHED = 'watched', 'Watched'
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -29,7 +29,7 @@ class WatchEntry(models.Model):
     rating = models.PositiveSmallIntegerField(
         null=True, blank=True,
         validators=[MinValueValidator(1), MaxValueValidator(10)],
-        help_text="1-10 arası puan (opsiyonel)",
+        help_text="1-10 range rating (optional)",
     )
     added_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
