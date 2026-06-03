@@ -21,9 +21,9 @@
 
         <div class="d-flex flex-wrap gap-3 mb-3 text-muted">
             {% if movie.release_year %}<span><i class="bi bi-calendar"></i> {{ movie.release_year }}</span>{% endif %}
-            {% if movie.runtime %}<span><i class="bi bi-clock"></i> {{ movie.runtime }} dk</span>{% endif %}
+            {% if movie.runtime %}<span><i class="bi bi-clock"></i> {{ movie.runtime }} min</span>{% endif %}
             {% if movie.vote_average %}<span><i class="bi bi-star-fill text-warning"></i> {{ movie.vote_average }}/10</span>{% endif %}
-            <span><i class="bi bi-tag"></i> {% if movie.media_type == 'movie' %}Film{% else %}Dizi{% endif %}</span>
+            <span><i class="bi bi-tag"></i> {% if movie.media_type == 'movie' %}Movie{% else %}Series{% endif %}</span>
         </div>
 
         {% if movie.genres.all %}

@@ -16,8 +16,8 @@
         {% if profile.location %}<p class="text-muted small"><i class="bi bi-geo-alt"></i> {{ profile.location }}</p>{% endif %}
 
         <div class="d-flex justify-content-center gap-3 mb-3">
-            <div><div class="fs-5 fw-bold" id="follower-count">{{ profile.follower_count }}</div><div class="small text-muted">Takipçi</div></div>
-            <div><div class="fs-5 fw-bold">{{ profile.following_count }}</div><div class="small text-muted">Takip</div></div>
+            <div><div class="fs-5 fw-bold" id="follower-count">{{ profile.follower_count }}</div><div class="small text-muted">Followers</div></div>
+            <div><div class="fs-5 fw-bold">{{ profile.following_count }}</div><div class="small text-muted">Following</div></div>
         </div>
 
         {% if is_self %}
@@ -61,9 +61,9 @@
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="watched">{% include 'accounts/_watch_grid.html' with entries=watched empty_msg="Henüz izlenen film/dizi yok." %}</div>
-            <div class="tab-pane fade" id="watching">{% include 'accounts/_watch_grid.html' with entries=watching empty_msg="Şu an izlenen yok." %}</div>
-            <div class="tab-pane fade" id="want">{% include 'accounts/_watch_grid.html' with entries=want empty_msg="İstek listesi boş." %}</div>
+            <div class="tab-pane fade show active" id="watched">{% include 'accounts/_watch_grid.html' with entries=watched empty_msg="No watched movies/series yet." %}</div>
+            <div class="tab-pane fade" id="watching">{% include 'accounts/_watch_grid.html' with entries=watching empty_msg="Nothing being watched right now." %}</div>
+            <div class="tab-pane fade" id="want">{% include 'accounts/_watch_grid.html' with entries=want empty_msg="Watchlist is empty." %}</div>
             <div class="tab-pane fade" id="reviews">
                 {% if reviews %}
                     {% for r in reviews %}
@@ -105,7 +105,7 @@ if (followBtn) {
             });
             if (!res.ok) return;
             const data = await res.json();
-            followBtn.textContent = data.following ? 'Takipten Çık' : 'Takip Et';
+            followBtn.textContent = data.following ? 'Unfollow' : 'Follow';
             followBtn.classList.toggle('btn-danger', data.following);
             followBtn.classList.toggle('btn-primary', !data.following);
             document.getElementById('follower-count').textContent = data.follower_count;

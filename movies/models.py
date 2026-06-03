@@ -24,8 +24,8 @@ class Movie(models.Model):
     """
 
     class MediaType(models.TextChoices):
-        MOVIE = 'movie', 'Film'
-        TV = 'tv', 'Dizi'
+        MOVIE = 'movie', 'Movie'
+        TV = 'tv', 'Series'
 
     tmdb_id = models.IntegerField()
     media_type = models.CharField(

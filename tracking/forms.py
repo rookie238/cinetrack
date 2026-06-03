@@ -12,7 +12,7 @@ class WatchEntryForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-select'}),
             'rating': forms.NumberInput(attrs={
                 'class': 'form-control', 'min': 1, 'max': 10,
-                'placeholder': '1-10 (opsiyonel)'
+                'placeholder': '1-10 (optional)'
             }),
         }
         labels = {

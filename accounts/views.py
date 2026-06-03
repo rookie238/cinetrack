@@ -23,7 +23,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, f"Hoş geldin {user.username}!")
+            messages.success(request, f"Welcome {user.username}!")
             return redirect('accounts:profile_self')
     else:
         form = SignUpForm()
@@ -87,7 +87,7 @@ def profile_edit_view(request):
         form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, "Profil güncellendi.")
+            messages.success(request, "Profile updated.")
             return redirect('accounts:profile_self')
     else:
         form = ProfileUpdateForm(instance=profile)
@@ -100,7 +100,7 @@ def toggle_follow_view(request, username):
     """AJAX: kullanıcıyı takip et / takipten çık. JSON döndürür."""
     target = get_object_or_404(User, username=username)
     if target == request.user:
-        return JsonResponse({'error': 'Kendini takip edemezsin'}, status=400)
+        return JsonResponse({'error': 'You cannot follow yourself'}, status=400)
     follow, created = Follow.objects.get_or_create(
         follower=request.user, following=target,
     )

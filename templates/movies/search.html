@@ -37,7 +37,7 @@
                                 <h6 class="card-title text-white mb-1 small">{{ item.title }}</h6>
                                 <small class="text-muted">
                                     {{ item.release_date|slice:":4" }}
-                                    · {% if item.media_type == 'movie' %}Film{% else %}Dizi{% endif %}
+                                    · {% if item.media_type == 'movie' %}Movie{% else %}Series{% endif %}
                                 </small>
                             </div>
                         </div>
@@ -50,11 +50,11 @@
             <nav class="mt-4">
                 <ul class="pagination justify-content-center">
                     {% if page > 1 %}
-                        <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page|add:'-1' }}">‹ Önceki</a></li>
+                        <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page|add:'-1' }}">‹ Previous</a></li>
                     {% endif %}
                     <li class="page-item active"><span class="page-link">{{ page }} / {{ total_pages }}</span></li>
                     {% if page < total_pages %}
-                        <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page|add:'1' }}">Sonraki ›</a></li>
+                        <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page|add:'1' }}">Next ›</a></li>
                     {% endif %}
                 </ul>
             </nav>

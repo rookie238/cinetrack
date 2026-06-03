@@ -22,7 +22,7 @@
                             <h6 class="card-title text-white mb-1 small">{{ entry.movie.title }}</h6>
                             <small class="text-muted">
                                 {{ entry.movie.release_year|default:"—" }}
-                                · {% if entry.movie.media_type == 'movie' %}Film{% else %}Dizi{% endif %}
+                                · {% if entry.movie.media_type == 'movie' %}Movie{% else %}Series{% endif %}
                             </small>
                         </div>
                     </div>
